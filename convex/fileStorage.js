@@ -61,16 +61,20 @@ export const GetFileRecord = query({
   }
 });
 
-export const GetUserFiles=query({
-  args:{
-    userEmail:v.optional(v.string())
+export const GetUserFiles = query({
+  args: {
+    userEmail: v.optional(v.string()),
   },
-  handler:async(ctx,args)=>{
-    if(args?.userEmail){
-      return 
+  handler: async (ctx, args) => {
+    if (!args?.userEmail) {
+      return []; // if no email provided, return empty array
     }
-    const result=await ctx.db.query('pdfFiles')
-    .filter((q)=>q.ep(q.field('createdBy'),args.userEmail)).collect();
-    return result
-  }
-})
+
+    const result = await ctx.db
+      .query('pdfFiles')
+      .filter((q) => q.eq(q.field('createdBy'), args.userEmail))
+      .collect();
+
+    return result;
+  },
+});

@@ -12,9 +12,6 @@ function TextEditor({fileId}) {
       fileId: fileId
     });
     
-    console.log('Notes from DB:', notes);
-    console.log('FileId:', fileId);
-
     const editor = useEditor({
         extensions: [StarterKit,
           Placeholder.configure({
@@ -32,7 +29,6 @@ function TextEditor({fileId}) {
     // Load stored notes when available
     useEffect(() => {
         if (editor && notes !== undefined) {
-            console.log('Setting editor content:', notes);
             if (notes && notes.length > 0) {
                 editor.commands.setContent(notes);
             } else {

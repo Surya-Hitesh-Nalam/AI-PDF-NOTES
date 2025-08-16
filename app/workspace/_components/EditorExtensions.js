@@ -2,12 +2,22 @@ import { chatSession } from '@/configs/AIModel';
 import { api } from '@/convex/_generated/api'
 import { useUser } from '@clerk/nextjs';
 import { useAction, useMutation } from 'convex/react'
-import { Bold, Italic, Sparkle } from 'lucide-react'
+import { 
+  Bold, 
+  Italic, 
+  Sparkle, 
+  Underline, 
+  Heading1, 
+  Heading2, 
+  List, 
+  ListOrdered, 
+  Quote, 
+  Code 
+} from 'lucide-react'
 import React from 'react'
 import { toast } from 'sonner';
 
 function EditorExtensions({editor, fileId}) {
-    // Remove the duplicate fileId declaration - use the prop instead
     const SearchAI = useAction(api.myAction.search)
     const saveNotes = useMutation(api.notes.AddNotes)
     const {user} = useUser()
@@ -25,7 +35,7 @@ function EditorExtensions({editor, fileId}) {
         try {
             const result = await SearchAI({
                 query: selectedText,
-                fileId: fileId, // Using the fileId prop
+                fileId: fileId,
             })
 
             const UnformatedAns = JSON.parse(result);
@@ -40,7 +50,6 @@ function EditorExtensions({editor, fileId}) {
             const AIModelResult = await chatSession.sendMessage(PROMPT)
             console.log(AIModelResult.response.text())
             
-            // Fixed: declare FinalAns with let/const
             const FinalAns = AIModelResult.response.text()
                 .replace(/```html/g, '')
                 .replace(/```/g, '');
@@ -50,7 +59,7 @@ function EditorExtensions({editor, fileId}) {
             
             await saveNotes({
                 notes: editor.getHTML(),
-                fileId: fileId, // Using the fileId prop
+                fileId: fileId,
                 createdBy: user?.primaryEmailAddress?.emailAddress
             })
 
@@ -65,18 +74,77 @@ function EditorExtensions({editor, fileId}) {
         <div className='p-5'>
             <div className="control-group">
                 <div className="button-group flex gap-3">
+                    {/* Bold */}
                     <button
                         onClick={() => editor.chain().focus().toggleBold().run()}
                         className={editor.isActive('bold') ? 'text-blue-500' : ''}
                     >
                         <Bold/>
                     </button>
+
+                    {/* Italic */}
                     <button
                         onClick={() => editor.chain().focus().toggleItalic().run()}
                         className={editor.isActive('italic') ? 'text-blue-500' : ''}
                     >
                         <Italic/>
                     </button>
+
+                    {/* Underline */}
+                    <button
+                        onClick={() => editor.chain().focus().toggleUnderline().run()}
+                        className={editor.isActive('underline') ? 'text-blue-500' : ''}
+                    >
+                        <Underline/>
+                    </button>
+
+                    {/* Headings */}
+                    <button
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                        className={editor.isActive('heading', { level: 1 }) ? 'text-blue-500' : ''}
+                    >
+                        <Heading1/>
+                    </button>
+
+                    <button
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                        className={editor.isActive('heading', { level: 2 }) ? 'text-blue-500' : ''}
+                    >
+                        <Heading2/>
+                    </button>
+
+                    {/* Lists */}
+                    <button
+                        onClick={() => editor.chain().focus().toggleBulletList().run()}
+                        className={editor.isActive('bulletList') ? 'text-blue-500' : ''}
+                    >
+                        <List/>
+                    </button>
+
+                    <button
+                        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                        className={editor.isActive('orderedList') ? 'text-blue-500' : ''}
+                    >
+                        <ListOrdered/>
+                    </button>
+
+                    {/* Blockquote */}
+                    <button
+                        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+                        className={editor.isActive('blockquote') ? 'text-blue-500' : ''}
+                    >
+                        <Quote/>
+                    </button>
+
+                    {/* Code Block */}
+                    <button
+                        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+                        className={editor.isActive('codeBlock') ? 'text-blue-500' : ''}
+                    >
+                        <Code/>
+                    </button>
+
+                    {/* AI Answer */}
                     <button
                         onClick={() => onAIClick()}
                         className={'hover:text-blue-500'}
