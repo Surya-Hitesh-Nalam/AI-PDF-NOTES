@@ -11,7 +11,7 @@ import Image from 'next/image';
 import React from 'react'
 
 function Dashboard() {
-  const {user} = useUser();
+  const { user } = useUser();
 
   const fileList = useQuery(api.fileStorage.GetUserFiles, {
     userEmail: user?.primaryEmailAddress?.emailAddress
@@ -36,7 +36,7 @@ function Dashboard() {
               </h1>
               <p className="text-gray-500">Access and manage all your PDF documents in one place</p>
             </div>
-            
+
             {/* Search and Action Bar */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="relative flex-1 max-w-xl">
@@ -44,10 +44,11 @@ function Dashboard() {
                 <input
                   placeholder="Search documents..."
                   className="pl-10 w-full bg-white/80 backdrop-blur-sm border-gray-200 focus-visible:ring-2 focus-visible:ring-blue-500/20"
+                  suppressHydrationWarning
                 />
               </div>
               <UploadPdfDialog>
-                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-blue-500/20">
+                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-blue-500/20" suppressHydrationWarning>
                   <Plus className="w-4 h-4 mr-2" />
                   New Document
                 </Button>
@@ -61,7 +62,7 @@ function Dashboard() {
               <Clock className="w-4 h-4" />
               <h2 className="font-medium">Recent Documents</h2>
             </div>
-            
+
             {(!notes || notes.length === 0) ? (
               <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-gray-200 rounded-2xl bg-white/50 backdrop-blur-sm">
                 <div className="p-4 bg-blue-50 rounded-full mb-4">
@@ -72,7 +73,7 @@ function Dashboard() {
                   Get started by uploading your first PDF document to extract and manage your notes.
                 </p>
                 <UploadPdfDialog>
-                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300">
+                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300" suppressHydrationWarning>
                     Upload your first document
                   </Button>
                 </UploadPdfDialog>

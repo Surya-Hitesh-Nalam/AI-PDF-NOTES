@@ -45,7 +45,7 @@ export function UploadPdfDialog({ children, isMaxFile }) {
       }
     }
   };
-  
+
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragging(true);
@@ -65,7 +65,7 @@ export function UploadPdfDialog({ children, isMaxFile }) {
       toast.error('Please upload a valid PDF file');
     }
   };
-  
+
   const OnUpload = async () => {
     setLoading(true);
     const toastId = toast.loading("Uploading and processing your file...");
@@ -87,7 +87,7 @@ export function UploadPdfDialog({ children, isMaxFile }) {
       // Step 3: Save the newly allocated storage id to the database
       const fileId = uuid4();
       const fileUrl = await getFileUrl({ storageId });
-      
+
       await AddFileEntry({
         _id: fileId,
         name: file.name,
@@ -130,6 +130,7 @@ export function UploadPdfDialog({ children, isMaxFile }) {
           onClick={() => setOpen(true)}
           disabled={isMaxFile}
           className="w-full"
+          suppressHydrationWarning
         >
           + Upload PDF File
         </Button>
@@ -141,14 +142,13 @@ export function UploadPdfDialog({ children, isMaxFile }) {
             Upload a PDF to extract text and create AI-powered notes.
           </DialogDescription>
         </DialogHeader>
-        
+
         <form onSubmit={OnUpload} className="space-y-6">
-          <div 
-            className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 ${
-              isDragging 
-                ? 'border-blue-500 bg-blue-50/50' 
+          <div
+            className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 ${isDragging
+                ? 'border-blue-500 bg-blue-50/50'
                 : 'border-gray-200 hover:border-blue-300 bg-gray-50/50'
-            }`}
+              }`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
@@ -225,9 +225,8 @@ export function UploadPdfDialog({ children, isMaxFile }) {
             <Button
               type="submit"
               disabled={!file || loading}
-              className={`w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 ${
-                (!file || loading) ? 'opacity-70' : ''
-              }`}
+              className={`w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 ${(!file || loading) ? 'opacity-70' : ''
+                }`}
             >
               {loading ? (
                 <>

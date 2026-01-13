@@ -1,30 +1,24 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { FileText, Home, Menu, Plus, Settings, LogOut, File, FileQuestion, HelpCircle, Star } from "lucide-react";
+import { FileText, Home, Plus, LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import { UploadPdfDialog } from "./UploadPdfDialog";
 import { cn } from "@/lib/utils";
-import { useClerk } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { Layout, Shield } from 'lucide-react'
-import Image from 'next/image'
 import React from 'react'
-import { useUser } from '@clerk/nextjs'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 
 export function SideBar({ isMaxFile }) {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
   const { signOut } = useClerk();
   const router = useRouter();
-  const {user} = useUser();
-  const fileList=useQuery(api.fileStorage.GetUserFiles,{
-    userEmail:user?.primaryEmailAddress?.emailAddress
+  const { user } = useUser();
+  const fileList = useQuery(api.fileStorage.GetUserFiles, {
+    userEmail: user?.primaryEmailAddress?.emailAddress
   })
 
   const navItems = [
@@ -32,34 +26,6 @@ export function SideBar({ isMaxFile }) {
       name: "Dashboard",
       href: "/dashboard",
       icon: Home,
-    },
-    {
-      name: "My Documents",
-      href: "/dashboard/documents",
-      icon: FileText,
-    },
-    {
-      name: "Templates",
-      href: "/dashboard/templates",
-      icon: File,
-    },
-    {
-      name: "Favorites",
-      href: "/dashboard/favorites",
-      icon: Star,
-    },
-  ];
-
-  const secondaryNavItems = [
-    {
-      name: "Help & Support",
-      href: "/help",
-      icon: HelpCircle,
-    },
-    {
-      name: "FAQ",
-      href: "/faq",
-      icon: FileQuestion,
     },
   ];
 
@@ -81,7 +47,7 @@ export function SideBar({ isMaxFile }) {
             </span>
           </Link>
         </div>
-        
+
         {/* Main Navigation */}
         <div className="flex-1 overflow-y-auto py-6 px-3">
           <div className="space-y-1">
@@ -107,51 +73,29 @@ export function SideBar({ isMaxFile }) {
                     )}
                   />
                   {item.name}
-                  {item.name === "Favorites" && (
-                    <span className="ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      3
-                    </span>
-                  )}
                 </Link>
               ))}
             </nav>
           </div>
 
-          {/* Secondary Navigation */}
+          {/* Sign Out */}
           <div className="mt-8">
-            <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-              Support
-            </h3>
-            <nav className="space-y-1">
-              {secondaryNavItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="group flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors"
-                >
-                  <item.icon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
-                  {item.name}
-                </a>
-              ))}
-              
-              {/* Sign Out Button */}
-              <Button
-                onClick={handleSignOut}
-                variant="ghost"
-                className="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-700"
-                suppressHydrationWarning
-              >
-                <LogOut className="mr-3 h-5 w-5" />
-                Sign out
-              </Button>
-            </nav>
+            <Button
+              onClick={handleSignOut}
+              variant="ghost"
+              className="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-700"
+              suppressHydrationWarning
+            >
+              <LogOut className="mr-3 h-5 w-5" />
+              Sign out
+            </Button>
           </div>
         </div>
 
         {/* Upload Button */}
         <div className="p-4 border-t border-gray-100">
-          <UploadPdfDialog isMaxFile={fileList?.length>=5?true:false}>
-            <Button 
+          <UploadPdfDialog isMaxFile={fileList?.length >= 5 ? true : false}>
+            <Button
               className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md hover:shadow-lg transition-all duration-300"
               suppressHydrationWarning
             >
@@ -159,7 +103,7 @@ export function SideBar({ isMaxFile }) {
               New Document
             </Button>
           </UploadPdfDialog>
-          
+
           {/* Storage Info */}
           <div className="mt-4 p-3 bg-blue-50 rounded-lg">
             <div className="flex justify-between text-sm text-gray-600 mb-1">
@@ -167,7 +111,7 @@ export function SideBar({ isMaxFile }) {
               <span>{fileList?.length} out of 5 pdf uploaded</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-1.5">
-              <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: `${(fileList?.length/5)*100}%` }}></div>
+              <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: `${(fileList?.length / 5) * 100}%` }}></div>
             </div>
           </div>
         </div>
