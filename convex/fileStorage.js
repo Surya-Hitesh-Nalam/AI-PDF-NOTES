@@ -5,32 +5,32 @@ export const generateUploadUrl = mutation(async (ctx) => {
   return await ctx.storage.generateUploadUrl();
 });
 
-export const AddFileEntryToDb=mutation({
-  args:{
-    fileId:v.string(),
-    storageId:v.string(),
-    fileUrl:v.string(),
-    fileName:v.string(),
-    createdBy:v.string()
+export const AddFileEntryToDb = mutation({
+  args: {
+    fileId: v.string(),
+    storageId: v.string(),
+    fileUrl: v.string(),
+    fileName: v.string(),
+    createdBy: v.string()
   },
-  handler:async(ctx,args)=>{
-    const result= await ctx.db.insert('pdfFiles',{
-      fileId:args.fileId,
-      fileName:args.fileName,
-      fileUrl:args.fileUrl,
-      storageId:args.storageId,
-      createdBy:args.createdBy
+  handler: async (ctx, args) => {
+    const result = await ctx.db.insert('pdfFiles', {
+      fileId: args.fileId,
+      fileName: args.fileName,
+      fileUrl: args.fileUrl,
+      storageId: args.storageId,
+      createdBy: args.createdBy
     })
     return "Inserted file"
   }
 })
 
 
-export const getFileUrl=mutation({
-  args:{
-    storageId:v.string(),
+export const getFileUrl = mutation({
+  args: {
+    storageId: v.string(),
   },
-  handler:async(ctx,args)=>{
+  handler: async (ctx, args) => {
     const url = await ctx.storage.getUrl(args.storageId)
     return url
   }
@@ -41,22 +41,15 @@ export const GetFileRecord = query({
     fileId: v.string(),
   },
   handler: async (ctx, args) => {
-    console.log('GetFileRecord called with fileId:', args.fileId);
-    
     const res = await ctx.db
       .query('pdfFiles')
       .filter((q) => q.eq(q.field('fileId'), args.fileId))
       .collect();
-    
-    console.log('Query result:', res);
-    console.log('Result length:', res.length);
-    
+
     if (res.length === 0) {
-      console.log('No file found with fileId:', args.fileId);
-      return null; // Return null if no file found
+      return null;
     }
-    
-    console.log('Returning file:', res[0]);
+
     return res[0];
   }
 });

@@ -1,4 +1,4 @@
-import { mutation,query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 export const AddNotes = mutation({
@@ -29,19 +29,14 @@ export const AddNotes = mutation({
 
 export const GetNotes = query({
   args: {
-    fileId: v.string() // ✅ Correct - expecting fileId, not field
+    fileId: v.string()
   },
   handler: async (ctx, args) => {
-    console.log('GetNotes called with fileId:', args.fileId);
-    
     const notes = await ctx.db
-      .query('notes') // Make sure this matches your table name
+      .query('notes')
       .filter((q) => q.eq(q.field('fileId'), args.fileId))
-      .first(); // Get the first/latest note for this file
-    
-    console.log('Notes found:', notes);
-    
-    // Return the notes content or empty string if no notes exist
+      .first();
+
     return notes?.notes || '';
   }
 });

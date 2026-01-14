@@ -22,13 +22,12 @@ export default function Home() {
   const checkUser = async () => {
     if (!user) return;
     try {
-      const result = await createUser({
+      await createUser({
         email: user?.primaryEmailAddress?.emailAddress,
         imageUrl: user?.imageUrl,
         userName: user?.fullName,
         name: user?.fullName,
       });
-      console.log(result);
     } catch (error) {
       console.error("Error creating user:", error);
     }
@@ -44,7 +43,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-700 flex flex-col items-center justify-center px-6 text-white relative overflow-hidden">
-      
+
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: 50 }}
@@ -57,7 +56,7 @@ export default function Home() {
         </h1>
 
         <p className="mt-6 text-lg md:text-xl text-gray-200">
-          Chat with your PDFs, generate customized notes, and summarize documents instantly.  
+          Chat with your PDFs, generate customized notes, and summarize documents instantly.
           Supercharge your productivity with the power of AI.
         </p>
 

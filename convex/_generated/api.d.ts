@@ -8,37 +8,50 @@
  * @module
  */
 
+import type * as User from "../User.js";
+import type * as fileStorage from "../fileStorage.js";
+import type * as langchain_db from "../langchain/db.js";
+import type * as myAction from "../myAction.js";
+import type * as notes from "../notes.js";
+
 import type {
   ApiFromModules,
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as fileStorage from "../fileStorage.js";
-import type * as langchain_db from "../langchain/db.js";
-import type * as myAction from "../myAction.js";
-import type * as notes from "../notes.js";
-import type * as User from "../User.js";
+
+declare const fullApi: ApiFromModules<{
+  User: typeof User;
+  fileStorage: typeof fileStorage;
+  "langchain/db": typeof langchain_db;
+  myAction: typeof myAction;
+  notes: typeof notes;
+}>;
 
 /**
- * A utility for referencing Convex functions in your app's API.
+ * A utility for referencing Convex functions in your app's public API.
  *
  * Usage:
  * ```js
  * const myFunctionReference = api.myModule.myFunction;
  * ```
  */
-declare const fullApi: ApiFromModules<{
-  fileStorage: typeof fileStorage;
-  "langchain/db": typeof langchain_db;
-  myAction: typeof myAction;
-  notes: typeof notes;
-  User: typeof User;
-}>;
 export declare const api: FilterApi<
   typeof fullApi,
   FunctionReference<any, "public">
 >;
+
+/**
+ * A utility for referencing Convex functions in your app's internal API.
+ *
+ * Usage:
+ * ```js
+ * const myFunctionReference = internal.myModule.myFunction;
+ * ```
+ */
 export declare const internal: FilterApi<
   typeof fullApi,
   FunctionReference<any, "internal">
 >;
+
+export declare const components: {};

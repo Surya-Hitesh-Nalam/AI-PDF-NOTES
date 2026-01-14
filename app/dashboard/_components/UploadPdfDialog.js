@@ -18,7 +18,6 @@ import { Loader2Icon, UploadCloud, FileText, X } from "lucide-react";
 import { useState, useRef } from "react";
 import uuid4 from "uuid4";
 import { useUser } from "@clerk/nextjs";
-import { AddFileEntryToDb } from "@/convex/fileStorage";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -71,7 +70,6 @@ export function UploadPdfDialog({ children, isMaxFile }) {
     const toastId = toast.loading("Uploading and processing your file...");
 
     try {
-      console.log("Starting upload process...");
 
       // Step 1: Get a short-lived upload URL
       const postUrl = await generateUploadUrl();
@@ -146,8 +144,8 @@ export function UploadPdfDialog({ children, isMaxFile }) {
         <form onSubmit={OnUpload} className="space-y-6">
           <div
             className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 ${isDragging
-                ? 'border-blue-500 bg-blue-50/50'
-                : 'border-gray-200 hover:border-blue-300 bg-gray-50/50'
+              ? 'border-blue-500 bg-blue-50/50'
+              : 'border-gray-200 hover:border-blue-300 bg-gray-50/50'
               }`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}

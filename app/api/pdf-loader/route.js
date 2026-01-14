@@ -5,11 +5,9 @@ import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 export async function GET(req) {
   try {
     const reqUrl = req.url;
-    const { searchParams } = new URL(reqUrl); // Fixed typo
+    const { searchParams } = new URL(reqUrl);
     const pdfUrl = searchParams.get('pdfUrl');
-    
-    console.log("PDF URL:", pdfUrl);
-    
+
     if (!pdfUrl) {
       return NextResponse.json({ error: "PDF URL required" }, { status: 400 });
     }
@@ -30,7 +28,7 @@ export async function GET(req) {
       chunkSize: 1000,
       chunkOverlap: 200
     });
-    
+
     const output = await splitter.createDocuments([pdfTextContent]);
     const splitterList = output.map(doc => doc.pageContent);
 

@@ -2,35 +2,34 @@ import { chatSession } from '@/configs/AIModel';
 import { api } from '@/convex/_generated/api'
 import { useUser } from '@clerk/nextjs';
 import { useAction, useMutation } from 'convex/react'
-import { 
-  Bold, 
-  Italic, 
-  Sparkle, 
-  Underline, 
-  Heading1, 
-  Heading2, 
-  List, 
-  ListOrdered, 
-  Quote, 
-  Code 
+import {
+    Bold,
+    Italic,
+    Sparkle,
+    Underline,
+    Heading1,
+    Heading2,
+    List,
+    ListOrdered,
+    Quote,
+    Code
 } from 'lucide-react'
 import React from 'react'
 import { toast } from 'sonner';
 
-function EditorExtensions({editor, fileId}) {
+function EditorExtensions({ editor, fileId }) {
     const SearchAI = useAction(api.myAction.search)
     const saveNotes = useMutation(api.notes.AddNotes)
-    const {user} = useUser()
+    const { user } = useUser()
 
-    const onAIClick = async() => {
+    const onAIClick = async () => {
         toast('AI is working on your answer')
-        
+
         const selectedText = editor.state.doc.textBetween(
             editor.state.selection.from,
             editor.state.selection.to,
             ' '
         )
-        console.log(selectedText)
 
         try {
             const result = await SearchAI({
@@ -45,18 +44,17 @@ function EditorExtensions({editor, fileId}) {
             });
 
             const PROMPT = "For question: " + selectedText + " and with given content as answer, " +
-            "please give appropriate answer in HTML format. The answer content is: " + AllUnformatedAns;
+                "please give appropriate answer in HTML format. The answer content is: " + AllUnformatedAns;
 
             const AIModelResult = await chatSession.sendMessage(PROMPT)
-            console.log(AIModelResult.response.text())
-            
+
             const FinalAns = AIModelResult.response.text()
                 .replace(/```html/g, '')
                 .replace(/```/g, '');
 
             const AllText = editor.getHTML();
             editor.commands.setContent(AllText + '<p> <strong>Answer: </strong>' + FinalAns + '</p>')
-            
+
             await saveNotes({
                 notes: editor.getHTML(),
                 fileId: fileId,
@@ -79,7 +77,7 @@ function EditorExtensions({editor, fileId}) {
                         onClick={() => editor.chain().focus().toggleBold().run()}
                         className={editor.isActive('bold') ? 'text-blue-500' : ''}
                     >
-                        <Bold/>
+                        <Bold />
                     </button>
 
                     {/* Italic */}
@@ -87,7 +85,7 @@ function EditorExtensions({editor, fileId}) {
                         onClick={() => editor.chain().focus().toggleItalic().run()}
                         className={editor.isActive('italic') ? 'text-blue-500' : ''}
                     >
-                        <Italic/>
+                        <Italic />
                     </button>
 
                     {/* Underline */}
@@ -95,7 +93,7 @@ function EditorExtensions({editor, fileId}) {
                         onClick={() => editor.chain().focus().toggleUnderline().run()}
                         className={editor.isActive('underline') ? 'text-blue-500' : ''}
                     >
-                        <Underline/>
+                        <Underline />
                     </button>
 
                     {/* Headings */}
@@ -103,14 +101,14 @@ function EditorExtensions({editor, fileId}) {
                         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
                         className={editor.isActive('heading', { level: 1 }) ? 'text-blue-500' : ''}
                     >
-                        <Heading1/>
+                        <Heading1 />
                     </button>
 
                     <button
                         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
                         className={editor.isActive('heading', { level: 2 }) ? 'text-blue-500' : ''}
                     >
-                        <Heading2/>
+                        <Heading2 />
                     </button>
 
                     {/* Lists */}
@@ -118,14 +116,14 @@ function EditorExtensions({editor, fileId}) {
                         onClick={() => editor.chain().focus().toggleBulletList().run()}
                         className={editor.isActive('bulletList') ? 'text-blue-500' : ''}
                     >
-                        <List/>
+                        <List />
                     </button>
 
                     <button
                         onClick={() => editor.chain().focus().toggleOrderedList().run()}
                         className={editor.isActive('orderedList') ? 'text-blue-500' : ''}
                     >
-                        <ListOrdered/>
+                        <ListOrdered />
                     </button>
 
                     {/* Blockquote */}
@@ -133,7 +131,7 @@ function EditorExtensions({editor, fileId}) {
                         onClick={() => editor.chain().focus().toggleBlockquote().run()}
                         className={editor.isActive('blockquote') ? 'text-blue-500' : ''}
                     >
-                        <Quote/>
+                        <Quote />
                     </button>
 
                     {/* Code Block */}
@@ -141,7 +139,7 @@ function EditorExtensions({editor, fileId}) {
                         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
                         className={editor.isActive('codeBlock') ? 'text-blue-500' : ''}
                     >
-                        <Code/>
+                        <Code />
                     </button>
 
                     {/* AI Answer */}
@@ -149,7 +147,7 @@ function EditorExtensions({editor, fileId}) {
                         onClick={() => onAIClick()}
                         className={'hover:text-blue-500'}
                     >
-                        <Sparkle/>
+                        <Sparkle />
                     </button>
                 </div>
             </div>
